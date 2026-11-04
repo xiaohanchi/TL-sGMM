@@ -1,38 +1,39 @@
 # Robust Bayesian Transfer Learning and Outlier Detection for Longitudinal Data in Hybrid Decentralized Clinical Trials: An Application to Weight-Loss Trials
 
-This repository holds the code and saved results behind the simulation studies and the real-data application in the paper. Each table in the paper can be regenerated from the saved results in a few minutes, without rerunning any MCMC.
-
-The saved simulation results are too large for this repository and are archived on Zenodo: [doi:10.5281/zenodo.23964967](https://doi.org/10.5281/zenodo.23964967).
+This repository holds the code and saved results behind the simulation studies and the real-data application in the paper. Each table in the paper can be regenerated from the saved results in a few minutes, without rerunning any MCMC. The saved simulation results are archived on Zenodo: [doi:10.5281/zenodo.23964967](https://doi.org/10.5281/zenodo.23964967).
 
 ## Repository layout
 
-```
-simulation/
-  iid_error/              main simulations, i.i.d. errors       (352 scenarios)
-  ar_error/               main simulations, AR(1) errors        (336 scenarios)
-  sensitivity/
-    num_clusters/         sensitivity: number of mixture components L   (42 scenarios)
-    num_measures/         sensitivity: alternative five-visit schedule  (224 scenarios)
-    each folder:
-      settings.R          scenario grid (all.config); row i = scenario i
-      main.R              runs one replicate of one scenario
-      functions.R, stan_functions.R   model fitting functions and Stan code
-      submit_jobs.sh, runjobs.lsf     LSF job submission
-      output_<i>.csv, muhat_fixed_<i>.csv, mutrue_fixed_<i>.csv
-                          saved results for scenario i (500 replicates);
-                          from simulation_results.zip on Zenodo, not in this repository
-real_data/
-  main.R, stan_more.R     real-data analysis (one model/setting per job; 1,392 settings)
-  runjobs.lsf             LSF job array
-  make_synthetic_data.R   generates data_synthetic.RData (see "Data availability")
-  data_synthetic.RData    synthetic data in the same format as the trial data
-  results/output.csv      saved estimates for all 1,392 settings
-  extract_shift_posterior.R   extracts shift_posterior.rds from the TL-sGMM fits (not shared)
-  results/shift_posterior.rds posterior draws of the shift parameters, used for Figure S1
-summary/                  scripts that build the paper's tables and Figure S1
-output/                   tables and figures produced by summary/ (as included in this repo)
-sessionInfo.txt           R session information for the cluster runs
-```
+**`simulation/`** has one folder per simulation study:
+
+- `iid_error/`: main simulations with i.i.d. errors (352 scenarios)
+- `ar_error/`: main simulations with AR(1) errors (336 scenarios)
+- `sensitivity/num_clusters/`: sensitivity analysis, number of mixture components L (42 scenarios)
+- `sensitivity/num_measures/`: sensitivity analysis, alternative five-visit schedule (224 scenarios)
+
+Each of these folders contains:
+
+- `settings.R`: the scenario grid (`all.config`); row i is scenario i
+- `main.R`: runs one replicate of one scenario
+- `functions.R` and `stan_functions.R`: model-fitting functions and Stan code
+- `submit_jobs.sh` and `runjobs.lsf`: LSF job submission
+- `output_<i>.csv`, `muhat_fixed_<i>.csv` and `mutrue_fixed_<i>.csv`: saved results for scenario i (500 replicates). These come from `simulation_results.zip` on Zenodo and are not in this repository.
+
+**`real_data/`** has the real-data analysis:
+
+- `main.R` and `stan_more.R`: the analysis code, one model/setting per job (1,392 settings)
+- `runjobs.lsf`: LSF job array
+- `make_synthetic_data.R`: generates `data_synthetic.RData` (see "Data availability")
+- `data_synthetic.RData`: synthetic data in the same format as the trial data
+- `results/output.csv`: saved estimates for all 1,392 settings
+- `extract_shift_posterior.R`: extracts `shift_posterior.rds` from the TL-sGMM fits, which are not shared
+- `results/shift_posterior.rds`: posterior draws of the shift parameters, used for Figure S1
+
+**Other files:**
+
+- `summary/`: scripts that build the paper's tables and Figure S1
+- `output/`: the tables and Figure S1 produced by `summary/`
+- `sessionInfo.txt`: R session information for the cluster runs
 
 ## Requirements
 
@@ -97,5 +98,4 @@ This writes `results/fit_k.RData` and appends one row to `results/output.csv`. R
 ## Data availability
 
 The simulation results are archived on Zenodo ([doi:10.5281/zenodo.23964967](https://doi.org/10.5281/zenodo.23964967)). They come from simulated data only.
-
 The real data come from the SURMOUNT-OSA trial and were provided by the industry sponsor under a data use agreement, so they cannot be shared. `real_data/data_synthetic.RData` is fully simulated by `make_synthetic_data.R` and contains no trial information. It has the same objects, column names and types as the trial data, so the real-data analysis code (`real_data/main.R`) can be run end to end. Results obtained from it are not meaningful.
