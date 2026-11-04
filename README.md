@@ -10,7 +10,7 @@ simulation/
   ar_error/               main simulations, AR(1) errors        (336 scenarios)
   sensitivity/
     num_clusters/         sensitivity: number of mixture components L   (42 scenarios)
-    num_measures/         sensitivity: number of measurements           (224 scenarios)
+    num_measures/         sensitivity: alternative five-visit schedule  (224 scenarios)
     each folder:
       settings.R          scenario grid (all.config); row i = scenario i
       main.R              runs one replicate of one scenario
@@ -42,11 +42,14 @@ Run each script from the repository root:
 
 | Paper output | Script | Output file (`output/`) |
 |---|---|---|
-| Table: outlier detection, FPR/FNR (`tab_detection`) | `Rscript summary/tables_simulation.R` | `tables/table1_n80.xlsx` |
-| Table: estimation, i.i.d. errors (`tab_est_iid`) and AR errors (`tab_est_ar`, Supplement) | same script | `tables/table2_n80.xlsx` (sheets `iid error, …` / `AR error, …`) |
-| Supplementary tables: number of components L (`tab_sensitivity1`, `tab_sensitivity2`) | same script | `tables/tableS_num_clusters.xlsx` |
-| Supplementary tables: number of measurements | same script | `tables/tableS_num_measures.xlsx` |
-| Table: SURMOUNT-OSA estimates (`tab_app_est`) | `Rscript summary/table_application.R` | `tables/table0.xlsx`; also `table0_full.xlsx`, `table0_reduced.xlsx`, `table0_raw.xlsx` |
+| Tables S2, S5: outlier detection, Δ = 0 / Δ = 2 (`tab_detection1`, `tab_detection2`) | `Rscript summary/tables_simulation.R` | `tables/table_simulation.xlsx` (sheets `Table S2`, `Table S5`) |
+| Tables S3, S4: estimation, i.i.d. errors, Δ = 0 / Δ = 2 (`tab_est_iid1`, `tab_est_iid2`) | same script | `tables/table_simulation.xlsx` (sheets `Table S3`, `Table S4`) |
+| Tables S6, S7: estimation, AR errors, Δ = 0 / Δ = 2 (`tab_est_ar1`, `tab_est_ar2`) | same script | `tables/table_simulation.xlsx` (sheets `Table S6`, `Table S7`) |
+| Tables S8–S10: alternative five-visit schedule (`tab_5visits_detect`, `tab_5visits_est1`, `tab_5visits_est2`) | same script | `tables/table_simulation.xlsx` (sheets `Table S8`–`Table S10`) |
+| Tables S11, S12: number of clustering components L (`tab_sensitivity1`, `tab_sensitivity2`) | same script | `tables/table_simulation.xlsx` (sheets `Table S11`, `Table S12`) |
+| Table 1: SURMOUNT-OSA treatment effects (`tab_app_est`) | `Rscript summary/table_application.R` | `tables/table_application.xlsx` (sheet `Table 1`) |
+| Table 2: TL-sGMM with reduced onsite data (`tab_app_reduced`) | same script | `tables/table_application.xlsx` (sheet `Table 2`) |
+| Table S1: arm-specific SURMOUNT-OSA estimates (`tab_app_arm`) | same script | `tables/table_application.xlsx` (sheet `Table S1`) |
 | Figure 1: weight-change trajectories | `Rscript summary/figures_application.R` | `figures/figure1.pdf` * |
 | Figure 2: detected outliers, representative subjects | same script | `figures/figure2.pdf` ** |
 | Figures 2b, 2c: outlier probabilities for all subjects; posterior of the remote–onsite shift | same script | `figures/figure2b.pdf`, `figures/figure2c.pdf` ** |
