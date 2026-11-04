@@ -1,4 +1,4 @@
-# Reproducibility materials: outlier detection for decentralized clinical trials
+# Robust Bayesian Transfer Learning and Outlier Detection for Longitudinal Data in Hybrid Decentralized Clinical Trials: An Application to Weight-Loss Trials
 
 This repository holds the code and saved results behind the simulation studies and the real-data application in the paper. Each table in the paper can be regenerated from the saved results in a few minutes, without rerunning any MCMC.
 
@@ -16,8 +16,8 @@ simulation/
       main.R              runs one replicate of one scenario
       functions.R, stan_functions.R   model fitting functions and Stan code
       submit_jobs.sh, runjobs.lsf     LSF job submission
-      jobtype<i>/results/ saved results for scenario i (500 replicates):
-                          output_<i>.csv, muhat_fixed_<i>.csv, mutrue_fixed_<i>.csv
+      output_<i>.csv, muhat_fixed_<i>.csv, mutrue_fixed_<i>.csv
+                          saved results for scenario i (500 replicates)
 real_data/
   main.R, stan_more.R     real-data analysis (one model/setting per job; 1,392 settings)
   runjobs.lsf             LSF job array
@@ -62,9 +62,10 @@ The saved results above were produced on an LSF cluster. Each simulation replica
 
 **Simulations.** Inside a simulation folder (e.g. `simulation/iid_error/`):
 
-1. Remove or move the existing `jobtype*/` folders. New results are appended to `results/output_<i>.csv`.
+1. Move the saved `output_*.csv`, `muhat_fixed_*.csv` and `mutrue_fixed_*.csv` files out of the folder.
 2. In `runjobs.lsf`, replace `/path/to/repo` and `/path/to/logs`, and adjust the `module load` lines for your cluster.
-3. Run `bash submit_jobs.sh`. This creates `jobtype<i>/` for each scenario and submits 500 replicates per scenario as LSF job arrays.
+3. Run `bash submit_jobs.sh`. This creates `jobtype<i>/` for each scenario and submits 500 replicates per scenario as LSF job arrays. Each job appends its replicate to `jobtype<i>/results/*_<i>.csv`.
+4. When all jobs have finished, move the results up to the folder that the summary scripts read: `mv jobtype*/results/*.csv .`
 
 To run a single replicate without LSF, from inside `jobtype<i>/`:
 
