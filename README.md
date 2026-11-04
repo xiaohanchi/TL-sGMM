@@ -36,11 +36,11 @@ sessionInfo.txt           R session information for the cluster runs
 - JAGS 4.3.x (https://mcmc-jags.sourceforge.io), used by **rjags** and **runjags**.
 - The summary scripts also need **openxlsx**, **ggplot2**, **patchwork**, **ggsci**, **ggtext**, **purrr**, **scales** and **RColorBrewer**.
 
-## Reproducing the tables and figures (minutes)
+## Reproducing the tables and figures
 
 Run each script from the repository root. Each sheet in the output workbooks is named after its table number in the paper.
 
-**Simulation tables (Tables S2–S12).** Run `Rscript summary/tables_simulation.R` (about 2–3 minutes). It writes `output/tables/table_simulation.xlsx`:
+**Simulation tables (Tables S2–S12).** Run `Rscript summary/tables_simulation.R`. It writes `output/tables/table_simulation.xlsx`:
 
 - Tables S2 and S5: outlier detection with Δ = 0 and Δ = 2
 - Tables S3 and S4: estimation with i.i.d. errors, Δ = 0 and Δ = 2
@@ -48,16 +48,18 @@ Run each script from the repository root. Each sheet in the output workbooks is 
 - Tables S8–S10: sensitivity analysis, alternative five-visit schedule
 - Tables S11 and S12: sensitivity analysis, number of clustering components L
 
-**Application tables (Tables 1, 2 and S1).** Run `Rscript summary/table_application.R` (under a minute). It writes `output/tables/table_application.xlsx`:
+**Application tables (Tables 1, 2 and S1).** Run `Rscript summary/table_application.R`. It writes `output/tables/table_application.xlsx`:
 
 - Table 1: SURMOUNT-OSA treatment effects
 - Table 2: TL-sGMM treatment effects with reduced onsite data
 - Table S1: arm-specific SURMOUNT-OSA estimates
 
-**Application figures.** Run `Rscript summary/figures_application.R` (under a minute). It writes PDFs to `output/figures/`:
+**Application figures (Figures 1 and 2): not reproducible from this repository.** Both figures plot individual patients' weight measurements from the SURMOUNT-OSA trial, which cannot be shared (see "Data availability"). The code that produced them is included in `summary/figures_application.R` for reference:
 
-- `figure1.pdf`: weight-change trajectories. With the public synthetic data it shows synthetic trajectories, not the trial data.
-- `figure2.pdf`, `figure2b.pdf`, `figure2c.pdf`: outlier detection results. These need the posterior fits `real_data/results/fit_{1225,1226,1285,1286}.RData`. These are the TL-sGMM fits with full onsite data (MCMC seed 123), one per arm, without (1225/1226) and with (1285/1286) the induced shift. The fits contain patient-level trial data, so they are not included, and the figures cannot be reproduced from this repository. With access to the trial data, run real-data settings 1225, 1226, 1285 and 1286 (see below) and then `summary/figures_application.R`. Running the same four settings on `data_synthetic.RData` checks that the code runs end to end.
+- Figure 1 (`figure1_2_combined.pdf`): observed weight-change trajectories, and the outliers TL-sGMM detects for representative subjects.
+- Figure 2 (`figure2b.pdf`): heatmap of TL-sGMM outlier probabilities for all subjects.
+
+Besides the trial data, these figures need the TL-sGMM posterior fits `real_data/results/fit_{1225,1226,1285,1286}.RData`, which also contain patient-level data and are not included. With access to the trial data, run real-data settings 1225, 1226, 1285 and 1286 (see below) and then `summary/figures_application.R`.
 
 ## Rerunning the analyses (HPC, optional)
 
@@ -88,4 +90,4 @@ This writes `results/fit_k.RData` and appends one row to `results/output.csv`. R
 
 ## Data availability
 
-The real data come from the SURMOUNT-OSA trial and were provided by the industry sponsor under a data use agreement, so they cannot be shared. `real_data/data_synthetic.RData` is fully simulated by `make_synthetic_data.R` and contains no trial information. It has the same objects, column names and types as the trial data, so `real_data/main.R` and the figure scripts run end to end. Results obtained from it are not meaningful.
+The real data come from the SURMOUNT-OSA trial and were provided by the industry sponsor under a data use agreement, so they cannot be shared. `real_data/data_synthetic.RData` is fully simulated by `make_synthetic_data.R` and contains no trial information. It has the same objects, column names and types as the trial data, so the real-data analysis code (`real_data/main.R`) can be run end to end. Results obtained from it are not meaningful.
