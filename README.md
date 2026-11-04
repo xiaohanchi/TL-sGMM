@@ -38,26 +38,26 @@ sessionInfo.txt           R session information for the cluster runs
 
 ## Reproducing the tables and figures (minutes)
 
-Run each script from the repository root:
+Run each script from the repository root. Each sheet in the output workbooks is named after its table number in the paper.
 
-| Paper output | Script | Output file (`output/`) |
-|---|---|---|
-| Tables S2, S5: outlier detection, Δ = 0 / Δ = 2 (`tab_detection1`, `tab_detection2`) | `Rscript summary/tables_simulation.R` | `tables/table_simulation.xlsx` (sheets `Table S2`, `Table S5`) |
-| Tables S3, S4: estimation, i.i.d. errors, Δ = 0 / Δ = 2 (`tab_est_iid1`, `tab_est_iid2`) | same script | `tables/table_simulation.xlsx` (sheets `Table S3`, `Table S4`) |
-| Tables S6, S7: estimation, AR errors, Δ = 0 / Δ = 2 (`tab_est_ar1`, `tab_est_ar2`) | same script | `tables/table_simulation.xlsx` (sheets `Table S6`, `Table S7`) |
-| Tables S8–S10: alternative five-visit schedule (`tab_5visits_detect`, `tab_5visits_est1`, `tab_5visits_est2`) | same script | `tables/table_simulation.xlsx` (sheets `Table S8`–`Table S10`) |
-| Tables S11, S12: number of clustering components L (`tab_sensitivity1`, `tab_sensitivity2`) | same script | `tables/table_simulation.xlsx` (sheets `Table S11`, `Table S12`) |
-| Table 1: SURMOUNT-OSA treatment effects (`tab_app_est`) | `Rscript summary/table_application.R` | `tables/table_application.xlsx` (sheet `Table 1`) |
-| Table 2: TL-sGMM with reduced onsite data (`tab_app_reduced`) | same script | `tables/table_application.xlsx` (sheet `Table 2`) |
-| Table S1: arm-specific SURMOUNT-OSA estimates (`tab_app_arm`) | same script | `tables/table_application.xlsx` (sheet `Table S1`) |
-| Figure 1: weight-change trajectories | `Rscript summary/figures_application.R` | `figures/figure1.pdf` * |
-| Figure 2: detected outliers, representative subjects | same script | `figures/figure2.pdf` ** |
-| Figures 2b, 2c: outlier probabilities for all subjects; posterior of the remote–onsite shift | same script | `figures/figure2b.pdf`, `figures/figure2c.pdf` ** |
+**Simulation tables (Tables S2–S12).** Run `Rscript summary/tables_simulation.R` (about 2–3 minutes). It writes `output/tables/table_simulation.xlsx`:
 
-`tables_simulation.R` takes about 2–3 minutes. The other scripts take under a minute.
+- Tables S2 and S5: outlier detection with Δ = 0 and Δ = 2
+- Tables S3 and S4: estimation with i.i.d. errors, Δ = 0 and Δ = 2
+- Tables S6 and S7: estimation with AR errors, Δ = 0 and Δ = 2
+- Tables S8–S10: sensitivity analysis, alternative five-visit schedule
+- Tables S11 and S12: sensitivity analysis, number of clustering components L
 
-\* With the public synthetic data, Figure 1 shows synthetic trajectories, not the trial data.
-\*\* These figures need the posterior fits `real_data/results/fit_{1225,1226,1285,1286}.RData`. These are the TL-sGMM fits with full onsite data (MCMC seed 123), one per arm, without (1225/1226) and with (1285/1286) the induced shift. The fits contain patient-level trial data, so they are not included, and the figures cannot be reproduced from this repository. With access to the trial data, run real-data settings 1225, 1226, 1285 and 1286 (see below) and then `summary/figures_application.R`. Running the same four settings on `data_synthetic.RData` checks that the code runs end to end.
+**Application tables (Tables 1, 2 and S1).** Run `Rscript summary/table_application.R` (under a minute). It writes `output/tables/table_application.xlsx`:
+
+- Table 1: SURMOUNT-OSA treatment effects
+- Table 2: TL-sGMM treatment effects with reduced onsite data
+- Table S1: arm-specific SURMOUNT-OSA estimates
+
+**Application figures.** Run `Rscript summary/figures_application.R` (under a minute). It writes PDFs to `output/figures/`:
+
+- `figure1.pdf`: weight-change trajectories. With the public synthetic data it shows synthetic trajectories, not the trial data.
+- `figure2.pdf`, `figure2b.pdf`, `figure2c.pdf`: outlier detection results. These need the posterior fits `real_data/results/fit_{1225,1226,1285,1286}.RData`. These are the TL-sGMM fits with full onsite data (MCMC seed 123), one per arm, without (1225/1226) and with (1285/1286) the induced shift. The fits contain patient-level trial data, so they are not included, and the figures cannot be reproduced from this repository. With access to the trial data, run real-data settings 1225, 1226, 1285 and 1286 (see below) and then `summary/figures_application.R`. Running the same four settings on `data_synthetic.RData` checks that the code runs end to end.
 
 ## Rerunning the analyses (HPC, optional)
 
