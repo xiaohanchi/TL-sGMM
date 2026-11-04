@@ -1,0 +1,30 @@
+#!/bin/bash
+#BSUB -J "app2[1-1392]"
+#BSUB -W 45:00
+#BSUB -o /path/to/logs/%J_%I.out
+#BSUB -e /path/to/logs/%J_%I.err
+#BSUB -cwd /path/to/repo/real_data/
+#BSUB -q long 
+#BSUB -n 3 
+#BSUB -M 10
+#BSUB -R rusage[mem=10]
+# #BSUB -N
+# #BSUB -u xchi@mdanderson.org
+
+
+module load miniforge3
+source activate xchi
+module load R/4.3.1
+module load jags/4.3.1
+
+
+echo "LSB_JOBID: " $LSB_JOBID
+echo "LSB_BATCH_JID: " $LSB_BATCH_JID
+echo "LSB_JOBINDEX: " $LSB_JOBINDEX
+
+
+cp main.R main_tmp${LSB_JOBINDEX}.R
+perl -pi -e "s/sc00/${LSB_JOBINDEX}/g" main_tmp${LSB_JOBINDEX}.R
+Rscript main_tmp${LSB_JOBINDEX}.R
+
+rm main_tmp${LSB_JOBINDEX}.R

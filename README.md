@@ -17,7 +17,8 @@ Each of these folders contains:
 - `main.R`: runs one replicate of one scenario
 - `functions.R` and `stan_functions.R`: model-fitting functions and Stan code
 - `submit_jobs.sh` and `runjobs.lsf`: LSF job submission
-- `output_<i>.csv`, `muhat_fixed_<i>.csv` and `mutrue_fixed_<i>.csv`: saved results for scenario i (500 replicates). These come from `simulation_results.zip` on Zenodo and are not in this repository.
+
+The saved simulation results are not in this repository. After you unzip `simulation_results.zip` from Zenodo (see below), each folder also holds `output_<i>.csv`, `muhat_fixed_<i>.csv` and `mutrue_fixed_<i>.csv` for every scenario i (500 replicates each).
 
 **`real_data/`** has the real-data analysis:
 
