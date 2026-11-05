@@ -1,27 +1,27 @@
-# Generate data_synthetic.RData: a fully simulated dataset with the same objects,
-# column names and types as the (proprietary) trial data used in the paper.
-# No values are taken from the trial data; it exists only so that main.R and the
-# application figures run end to end. Results on it are not meaningful.
+# Generate data_synthetic.RData: a fully simulated dataset of 60 patients (30 per arm)
+# with the same objects, column names and types as the (proprietary) trial data
+# used in the paper. No values are taken from the trial data; it only illustrates
+# the data format expected by main.R and lets every model in it run.
+# Results on it are not meaningful.
 # Run from the real_data/ folder: Rscript make_synthetic_data.R
 library(dplyr)
 library(hms)
 
 set.seed(2026)
 
-n_onsite <- 293 # subjects in the onsite-only cohort
-n_remote <- 122 # subset of them with remote (home) measurements
-fig_consistent <- c(253, 272, 248, 318) # subject ids shown in Figures 1-2
-fig_outlier <- c(182, 90, 461, 386)
-fig_id <- c(fig_consistent, fig_outlier)
-
-ids_all <- c(fig_id, sample(setdiff(1:500, fig_id), n_onsite - length(fig_id)))
-ids_remote <- c(fig_id, sample(setdiff(ids_all, fig_id), n_remote - length(fig_id)))
+# patients 1-4: consistent onsite and remote measurements;
+# patients 5-8: one remote outlier pattern each; patients 9-60: random patterns
+fig_consistent <- 1:4
+fig_outlier <- 5:8
+n_onsite <- 60
+ids_all <- 1:n_onsite
+ids_remote <- ids_all
 
 ## Baseline characteristics ------------------------------------------------
 data_baseline_onsite <- tibble(
   USUBJID = as.numeric(ids_all),
   SSTUDYID = sample(c("GPI1", "GPI2"), n_onsite, replace = TRUE),
-  TRT01P = sample(c("TZP MTD", "Placebo"), n_onsite, replace = TRUE),
+  TRT01P = rep(c("TZP MTD", "Placebo"), length.out = n_onsite),
   AGE = as.numeric(sample(30:75, n_onsite, replace = TRUE)),
   SEX = as.numeric(sample(1:2, n_onsite, replace = TRUE)),
   RACE = as.numeric(sample(1:6, n_onsite, replace = TRUE)),
@@ -40,7 +40,8 @@ data_baseline <- data_baseline_onsite %>% filter(USUBJID %in% ids_remote)
 ## Subject-level mean trajectory (weight change, kg) ------------------------
 subj <- data_baseline_onsite %>%
   transmute(USUBJID, WEIGHTBL, TRT01P,
-    target = if_else(TRT01P == "TZP MTD", -0.20, -0.025) * WEIGHTBL,
+    # long-run % weight change: arm mean plus patient-level variation
+    target = (if_else(TRT01P == "TZP MTD", -0.20, -0.025) + rnorm(n_onsite, 0, 0.05)) * WEIGHTBL,
     slope_mult = pmax(rnorm(n_onsite, 1, 0.3), 0.2),
     b0 = rnorm(n_onsite, 0, 1.5)
   )
@@ -78,12 +79,12 @@ data_onsite_only <- onsite
 remote <- lapply(ids_remote, function(id) {
   s <- filter(subj, USUBJID == id)
   n_obs <- min(max(round(exp(rnorm(1, 3, 1.2))), 1), 450)
-  if (id %in% fig_id) n_obs <- max(n_obs, 40)
+  if (id %in% c(fig_consistent, fig_outlier)) n_obs <- max(n_obs, 40)
   ady <- sort(sample(2:365, n_obs, replace = n_obs > 364))
   hr <- runif(n_obs, 5, 23)
   week <- (ady - 1 + hr / 24) / 7
   y <- mean_traj(s, week) + rnorm(1, 0, 0.5) + rnorm(n_obs, 0, 1.2)
-  # remote-specific outliers (none for the "consistent" figure subjects)
+  # remote-specific outliers
   pattern <- if (id %in% fig_consistent) {
     0
   } else if (id %in% fig_outlier) {

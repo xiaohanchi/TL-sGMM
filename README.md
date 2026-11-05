@@ -25,7 +25,7 @@ The saved simulation results are not in this repository. After you unzip `simula
 - `main.R` and `stan_more.R`: the analysis code, one model/setting per job (1,392 settings)
 - `runjobs.lsf`: LSF job array
 - `make_synthetic_data.R`: generates `data_synthetic.RData` (see "Data availability")
-- `data_synthetic.RData`: synthetic data in the same format as the trial data
+- `data_synthetic.RData`: synthetic data for 60 simulated patients, in the same format as the trial data
 - `results/output.csv`: saved estimates for all 1,392 settings
 - `extract_shift_posterior.R`: extracts `shift_posterior.rds` from the TL-sGMM fits, which are not shared
 - `results/shift_posterior.rds`: posterior draws of the shift parameters, used for Figure S1
@@ -65,7 +65,7 @@ Run each script from the repository root. Each sheet in the output workbooks is 
 - Table 2: TL-sGMM treatment effects with reduced onsite data
 - Table S1: arm-specific SURMOUNT-OSA estimates
 
-**Figure S1.** Run `Rscript summary/figure_S1.R` (under a minute). It writes `output/figures/figure_S1.pdf`, the posterior of the TL-sGMM remote–onsite shift for each arm. It reads `real_data/results/shift_posterior.rds`, which holds only the posterior draws of the shift parameters, the spline knots and the arm labels from the four TL-sGMM fits (full onsite data; observed data and induced shift). The full fits contain patient-level data and are not shared; `real_data/extract_shift_posterior.R` shows how the file was extracted from them.
+**Figure S1.** Run `Rscript summary/figure_S1.R`. It writes `output/figures/figure_S1.pdf`, the posterior of the TL-sGMM remote–onsite shift for each arm. It reads `real_data/results/shift_posterior.rds`, which holds only the posterior draws of the shift parameters, the spline knots and the arm labels from the four TL-sGMM fits (full onsite data; observed data and induced shift). The full fits contain patient-level data and are not shared; `real_data/extract_shift_posterior.R` shows how the file was extracted from them.
 
 **Figures 1 and 2: not provided.** Both figures show individual patients' data from the SURMOUNT-OSA trial (weight trajectories, and per-patient outlier probabilities), which cannot be shared (see "Data availability"), so they are not reproducible from this repository.
 
@@ -99,4 +99,4 @@ This writes `results/fit_k.RData` and appends one row to `results/output.csv`. R
 ## Data availability
 
 The simulation results are archived on Zenodo ([doi:10.5281/zenodo.23964967](https://doi.org/10.5281/zenodo.23964967)). They come from simulated data only.
-The real data come from the SURMOUNT-OSA trial and were provided by the industry sponsor under a data use agreement, so they cannot be shared. `real_data/data_synthetic.RData` is fully simulated by `make_synthetic_data.R` and contains no trial information. It has the same objects, column names and types as the trial data, so the real-data analysis code (`real_data/main.R`) can be run end to end. Results obtained from it are not meaningful.
+The real data come from the SURMOUNT-OSA trial and were provided by the industry sponsor under a data use agreement, so they cannot be shared. `real_data/data_synthetic.RData` is fully simulated by `make_synthetic_data.R` and contains no trial information: 60 patients (30 per arm, IDs 1–60), some with simulated outliers in their remote measurements. It has the same objects, column names and types as the trial data, so the real-data analysis code (`real_data/main.R`) can be run end to end. Results obtained from it are not meaningful.
