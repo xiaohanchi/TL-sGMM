@@ -67,7 +67,7 @@ Run each script from the repository root. Each sheet in the output workbooks is 
 
 **Figure S1.** Run `Rscript summary/figure_S1.R`. It writes `output/figures/figure_S1.pdf`, the posterior of the TL-sGMM remote–onsite shift for each arm. It reads `real_data/results/shift_posterior.rds`, which holds only the posterior draws of the shift parameters, the spline knots and the arm labels from the four TL-sGMM fits (full onsite data; observed data and induced shift). The full fits contain patient-level data and are not shared; `real_data/extract_shift_posterior.R` shows how the file was extracted from them.
 
-**Figures 1 and 2: not provided.** Both figures show individual patients' data from the SURMOUNT-OSA trial (weight trajectories, and per-patient outlier probabilities), which cannot be shared (see "Data availability"), so they are not reproducible from this repository.
+**Figures 1, 2 and S2: not provided.** These figures show individual patients' data from the SURMOUNT-OSA trial (weight trajectories, per-patient outlier probabilities, and outlier detection with reduced onsite data), which cannot be shared (see "Data availability"), so they are not reproducible from this repository.
 
 ## Rerunning the analyses (HPC, optional)
 
